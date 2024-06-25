@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+import shlex
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -115,13 +116,39 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        if not args:
+        arg = args.split()
+        flag = 0
+
+        if not arg[0]:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        elif arg[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+
+        new_instance = HBNBCommand.classes[arg[0]]()
+        d = {}
+        for a in arg[1:]:
+            if "=" in a:
+                key, value = a.split("=")
+                d[key] = value
+
+        for k, v in d.items():
+            if v.startswith('\"'):
+                flag = 1
+                d[k] = v.strip('\"').replace("_", " ")
+
+            if flag == 0:
+                try:
+                    d[k] = int(v)
+                except ValueError:
+                    try:
+                        d[k] = float(v)
+                    except ValueError:
+                        return
+
+            setattr(new_instance, k, d[k])
+            flag = 0
         storage.save()
         print(new_instance.id)
         storage.save()
@@ -187,7 +214,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del (storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -229,7 +256,7 @@ class HBNBCommand(cmd.Cmd):
         print(count)
 
     def help_count(self):
-        """ """
+        """documentation for the count function"""
         print("Usage: count <class_name>")
 
     def do_update(self, args):
@@ -319,6 +346,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
