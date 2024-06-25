@@ -13,9 +13,9 @@ class FileStorage:
         objects = {}
         if cls is not None:
             for k, v in FileStorage.__objects.items():
-                name, _ = k.split('.')
-                if name == cls:
-                    objects.update({k:v})
+                name = k.split('.')[0]
+                if name == cls.__name__:
+                    objects.update({k: v})
             return objects
         else:
             return FileStorage.__objects
@@ -53,12 +53,13 @@ class FileStorage:
             with open(FileStorage.__file_path, 'r', encoding="utf-8") as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                        self.all()[key] = classes[val['__class__']](**val)
+                    self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
 
     def delete(self, obj=None):
-        if obj == None:
+        """Deletes an obj"""
+        if obj is None:
             return
         key = f"{obj.to_dict()['__class__']}.{obj.id}"
         if key in FileStorage.__objects:
