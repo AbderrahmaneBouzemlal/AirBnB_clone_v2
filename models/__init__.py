@@ -30,3 +30,4 @@ def switch():
 
 
 storage = switch()
+storage.reload()
