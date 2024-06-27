@@ -2,7 +2,8 @@
 """this module hava a class that handle the Database"""
 from os import environ
 from sqlalchemy import create_engine
-from models.base_model import BaseModel, Base
+from sqlalchemy.orm import sessionmaker, scoped_session
+from models.base_model import Base
 
 
 class DBStorage:
