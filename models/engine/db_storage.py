@@ -1,18 +1,17 @@
 #!/usr/bin/python3
 """this module hava a class that handle the Database"""
 from os import environ
-from sqlalchemy import select, create_engine, Column, Integer, String, DateTime, MetaData
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy import create_engine
 from models.base_model import BaseModel, Base
 
 
 class DBStorage:
     """
     A class that acts as a handler for the database server.
-    
     Attributes:
         __engine (sqlalchemy.Engine): The SQLAlchemy engine instance.
-        __session (sqlalchemy.orm.scoping.scoped_session): The SQLAlchemy session instance.
+        __session (sqlalchemy.orm.scoping.scoped_session):
+                    The SQLAlchemy session instance.
         objects (list): List of class names to handle in the database.
     """
     __engine = None
@@ -22,8 +21,8 @@ class DBStorage:
     def __init__(self) -> None:
         """
         Initializes the DBStorage instance.
-        
-        Sets up the database engine and session. Drops all tables if the environment
+        Sets up the database engine and session.
+        Drops all tables if the environment
         variable HBNB_ENV is set to 'test'.
         """
         user = environ.get('HBNB_MYSQL_USER')
@@ -32,7 +31,10 @@ class DBStorage:
         database = environ.get('HBNB_MYSQL_DB')
         env = environ.get('HBNB_ENV')
 
-        self.__engine = create_engine(f'mysql+mysqldb://{user}:{password}@{host}:3306/{database}', pool_pre_ping=True)
+        self.__engine = create_engine(
+            f'mysql+mysqldb://{user}:{password}@{host}:3306/{database}',
+            pool_pre_ping=True
+            )
 
         if env == 'test':
             Base.metadata.drop_all(self.__engine)
@@ -41,13 +43,14 @@ class DBStorage:
 
     def all(self, cls=None):
         """
-        Queries the current database session for all objects of a given class.
-
+        Queries the current database session
+        for all objects of a given class.
         Args:
-            cls (type, optional): The class type to query for. If None, queries all types.
-
+            cls (type, optional): The class type to query for.
+            If None, queries all types.
         Returns:
-            dict: A dictionary of queried objects with keys in the format <class-name>.<object-id>.
+            dict: A dictionary of queried objects
+            with keys in the format <class-name>.<object-id>.
         """
         results = []
         dictionary = {}
@@ -88,7 +91,6 @@ class DBStorage:
     def reload(self):
         """
         Creates all tables in the database and initializes the session.
-        
         Ensures that all models are correctly imported.
         """
         from models.state import State

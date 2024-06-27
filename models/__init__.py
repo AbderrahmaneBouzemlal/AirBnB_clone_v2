@@ -16,4 +16,5 @@ def switch():
         storage = FileStorage()
     return storage
 
+
 storage = switch()

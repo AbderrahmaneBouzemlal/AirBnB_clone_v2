@@ -11,9 +11,20 @@ class BaseModel:
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
         if not kwargs:
-            self.id = Column(String, length=30, primary_key=True, nullable=False)
-            self.created_at = Column(DATETIME, nullable=False, default=datetime.utcnow())
-            self.updated_at = Column(DATETIME, nullable=False, default=datetime.utcnow())
+            self.id = Column(
+                String,
+                length=30,
+                primary_key=True,
+                nullable=False
+                )
+            self.created_at = Column(DATETIME,
+                                     nullable=False,
+                                     default=datetime.utcnow()
+                                     )
+            self.updated_at = Column(DATETIME,
+                                     nullable=False,
+                                     default=datetime.utcnow()
+                                     )
         else:
             kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
                                                      '%Y-%m-%dT%H:%M:%S.%f')
