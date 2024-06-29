@@ -38,6 +38,7 @@ class DBStorage:
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
         objects = dict()
+        self.reload()
         all_classes = (User, State, City, Amenity, Place, Review)
         if cls is None:
             for class_type in all_classes:
