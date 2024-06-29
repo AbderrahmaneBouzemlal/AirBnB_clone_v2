@@ -141,10 +141,10 @@ class HBNBCommand(cmd.Cmd):
                         except ValueError:
                             continue
                 setattr(new_instance, key, value)
+        print(new_instance.__dict__)
 
         new_instance.save()
-        print(new_instance.id)
-        storage.reload()
+        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
@@ -341,3 +341,5 @@ class HBNBCommand(cmd.Cmd):
         print("Usage: update <className> <id> <attName> <attVal>\n")
 
 
+if __name__ == "__main__":
+    HBNBCommand().cmdloop()
