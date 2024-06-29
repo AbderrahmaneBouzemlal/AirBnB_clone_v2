@@ -127,31 +127,24 @@ class HBNBCommand(cmd.Cmd):
             return
 
         new_instance = HBNBCommand.classes[arg[0]]()
-        d = {}
         for a in arg[1:]:
             if "=" in a:
-                key, value = a.split("=")
-                d[key] = value
-
-        for k, v in d.items():
-            if v.startswith('\"'):
-                flag = 1
-                d[k] = v.strip('\"').replace("_", " ")
-
-            if flag == 0:
-                try:
-                    d[k] = int(v)
-                except ValueError:
+                key, value = a.split("=", 1)
+                if value.startswith('"') and value.ends('"'):
+                    value = value[1:-1].replace("_", " ")
+                else:
                     try:
-                        d[k] = float(v)
+                        value = int(value)
                     except ValueError:
-                        return
+                        try:
+                            value = float(value)
+                        except ValueError:
+                            continue
+                setattr(new_instance, key, value)
 
-            setattr(new_instance, k, d[k])
-            flag = 0
-        storage.save()
+        new_instance.save()
         print(new_instance.id)
-        storage.save()
+        storage.reload()
 
     def help_create(self):
         """ Help information for the create method """
