@@ -130,7 +130,7 @@ class HBNBCommand(cmd.Cmd):
         for a in arg[1:]:
             if "=" in a:
                 key, value = a.split("=", 1)
-                if value.startswith('"') and value.ends('"'):
+                if value.startswith('"') and value.endswith('"'):
                     value = value[1:-1].replace("_", " ")
                 else:
                     try:
@@ -141,7 +141,7 @@ class HBNBCommand(cmd.Cmd):
                         except ValueError:
                             continue
                 setattr(new_instance, key, value)
-        print(new_instance.__dict__)
+        print(new_instance.id)
         new_instance.save()
         storage.save()
 
