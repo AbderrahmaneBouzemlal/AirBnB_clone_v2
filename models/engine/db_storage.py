@@ -4,7 +4,6 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 import urllib.parse
-
 from models.base_model import BaseModel, Base
 from models.state import State
 from models.city import City
@@ -42,13 +41,13 @@ class DBStorage:
         all_classes = (User, State, City, Amenity, Place, Review)
         if cls is None:
             for class_type in all_classes:
-                query = self.__session.query(class_type)
-                for obj in query.all():
+                query = self.__session.query(class_type).all()
+                for obj in query:
                     obj_key = '{}.{}'.format(obj.__class__.__name__, obj.id)
                     objects[obj_key] = obj
         else:
-            query = self.__session.query(cls)
-            for obj in query.all():
+            query = self.__session.query(cls).all()
+            for obj in query:
                 obj_key = '{}.{}'.format(obj.__class__.__name__, obj.id)
                 objects[obj_key] = obj
         return objects
