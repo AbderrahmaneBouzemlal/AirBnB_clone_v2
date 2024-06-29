@@ -6,10 +6,14 @@ from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModel, Base
 
-
-class Amenity(BaseModel, Base):
-    """Represents an amenity data set."""
-    __tablename__ = 'amenities'
-    name = Column(
-        String(128), nullable=False
-    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
+if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+    class Amenity(BaseModel, Base):
+        """Represents an amenity data set."""
+        __tablename__ = 'amenities'
+        name = Column(
+            String(128), nullable=False
+        )
+else:
+    class Amenity(BaseModel):
+        """Represents an amenity data set."""
+        name = ''

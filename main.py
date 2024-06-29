@@ -4,11 +4,11 @@ import io
 import sys
 import cmd
 import shutil
-import os
 
 """
  Cleanup file storage
 """
+import os
 file_path = "file.json"
 if not os.path.exists(file_path):
     try:
@@ -84,7 +84,8 @@ def exec_command(my_console, the_command, last_lines = 1):
 """
  Tests
 """
-result = exec_command(my_console, "create State")
+state_name = "California"
+result = exec_command(my_console, "create State name=\"{}\"".format(state_name))
 if result is None or result == "":
     print("FAIL: No ID retrieved")
 with open(file_path, "r") as file:
@@ -95,4 +96,3 @@ print("OK", end="")
 
 shutil.copy("tmp_console_main.py", "console.py")
 shutil.copy("models/tmp__init__.py", "models/__init__.py")
-
