@@ -13,4 +13,4 @@ ln -s -f /data/web_static/releases/test/ /data/webstatic/current
 # Change ownership
 chown -R ubuntu:ubuntu /data/
 sed '/server {\n/\tlocation /hbnb_static/ {\n\troot /data/web_static/current/;\n\talias /data/web_static/current/hbnb_static/;\n\t autoindex off;\n}'
-
+nginx -s reload
