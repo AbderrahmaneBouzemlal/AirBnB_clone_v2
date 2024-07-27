@@ -24,6 +24,7 @@ def c(text):
     text = text.replace('_', ' ')
     return f'C {escape(text)}'
 
+
 @app.route(
     '/python/',
     defaults={'text': 'is_cool'},
