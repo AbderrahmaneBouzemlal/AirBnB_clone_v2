@@ -27,3 +27,7 @@ def do_pack():
     except Exception:
         output = None
     return output
+
+
+if __name__ == '__main__':
+    do_pack()

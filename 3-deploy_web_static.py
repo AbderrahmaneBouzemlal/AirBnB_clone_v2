@@ -6,6 +6,7 @@ from fabric.api import env, local, put, run, runs_once
 
 
 env.hosts = ["54.198.53.210", "52.23.212.104"]
+env.user = "ubuntu"
 """The list of host server IP addresses."""
 
 
@@ -65,3 +66,20 @@ def deploy():
     """
     archive_path = do_pack()
     return do_deploy(archive_path) if archive_path else False
+
+
+if __name__ == '__main__':
+    archive_path = do_pack()
+    if not archive_path:
+        print("Packing failed")
+        exit(1)
+
+    # Run the do_deploy task on each server
+    for host in env.hosts:
+        env.host_string = host
+        result = do_deploy(archive_path)
+        if result:
+            print(f"Deployment succeeded on {host}")
+        else:
+            print(f"Deployment failed on {host}")
+    deploy()

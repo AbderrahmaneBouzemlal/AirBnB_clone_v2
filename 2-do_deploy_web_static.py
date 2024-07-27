@@ -6,6 +6,7 @@ from fabric.api import env, local, put, run, runs_once
 
 
 env.hosts = ["54.198.53.210", "52.23.212.104"]
+env.user = 'ubuntu'
 """The list of host server IP addresses."""
 
 
@@ -28,8 +29,9 @@ def do_pack():
         local("tar -cvzf {} web_static".format(output))
         archize_size = os.stat(output).st_size
         print("web_static packed: {} -> {} Bytes".format(output, archize_size))
-    except Exception:
+    except Exception as e:
         output = None
+        print(e)
     return output
 
 
@@ -58,3 +60,19 @@ def do_deploy(archive_path):
     except Exception:
         success = False
     return success
+
+
+if __name__ == '__main__':
+    archive_path = do_pack()
+    if not archive_path:
+        print("Packing failed")
+        exit(1)
+
+    # Run the do_deploy task on each server
+    for host in env.hosts:
+        env.host_string = host
+        result = do_deploy(archive_path)
+        if result:
+            print(f"Deployment succeeded on {host}")
+        else:
+            print(f"Deployment failed on {host}")
