@@ -3,7 +3,6 @@
 import os
 from sqlalchemy import Column, Float, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import relationship
-
 from models.base_model import BaseModel, Base
 from models.review import Review
 from models.amenity import Amenity
@@ -76,6 +75,7 @@ if os.getenv('HBNB_TYPE_STORAGE') == 'db':
             viewonly=False,
             backref='place_amenities'
         )
+
 else:
     class Place(BaseModel):
         """ A place to stay """

@@ -15,11 +15,7 @@ if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         state_id = Column(
             String(60), ForeignKey('states.id'), nullable=False
         )
-        places = relationship(
-            'Place',
-            cascade='all, delete, delete-orphan',
-            backref='cities'
-        )
+        state = relationship('State', back_populates='cities')
 else:
     class City(BaseModel):
         """ The city class, contains state ID and name """
