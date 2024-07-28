@@ -33,9 +33,9 @@ if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         )
 else:
     class User(BaseModel):
-        email=""
-        password=""
-        first_name=""
-        last_name=""
-        places=None
-        reviews=None
+        email = ""
+        password = ""
+        first_name = ""
+        last_name = ""
+        places = None
+        reviews = None
