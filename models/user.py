@@ -1,25 +1,25 @@
 #!/usr/bin/python3
 """This module defines a class User"""
 import os
-from sqlalchemy import Column, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import String
+from sqlalchemy.orm import relationship, mapped_column
 from models.base_model import BaseModel, Base
 
 if os.getenv('HBNB_TYPE_STORAGE') == 'db':
     class User(BaseModel, Base):
         """This class defines a user by various attributes"""
         __tablename__ = 'users'
-        email = Column(
-            String(128), nullable=False
+        email = mapped_column(
+            String(128), nullable=False, sort_order=3
         )
-        password = Column(
-            String(128), nullable=False
+        password = mapped_column(
+            String(128), nullable=False, sort_order=4
         )
-        first_name = Column(
-            String(128), nullable=True
+        first_name = mapped_column(
+            String(128), nullable=True, sort_order=5
         )
-        last_name = Column(
-            String(128), nullable=True
+        last_name = mapped_column(
+            String(128), nullable=True, sort_order=6
         )
         places = relationship(
             'Place',
