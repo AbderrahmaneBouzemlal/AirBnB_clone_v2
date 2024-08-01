@@ -4,6 +4,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 import urllib.parse
+
 from models.base_model import BaseModel, Base
 from models.state import State
 from models.city import City
@@ -38,17 +39,16 @@ class DBStorage:
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
         objects = dict()
-        self.reload()
         all_classes = (User, State, City, Amenity, Place, Review)
         if cls is None:
             for class_type in all_classes:
-                query = self.__session.query(class_type).all()
-                for obj in query:
+                query = self.__session.query(class_type)
+                for obj in query.all():
                     obj_key = '{}.{}'.format(obj.__class__.__name__, obj.id)
                     objects[obj_key] = obj
         else:
-            query = self.__session.query(cls).all()
-            for obj in query:
+            query = self.__session.query(cls)
+            for obj in query.all():
                 obj_key = '{}.{}'.format(obj.__class__.__name__, obj.id)
                 objects[obj_key] = obj
         return objects
@@ -83,8 +83,7 @@ class DBStorage:
             bind=self.__engine,
             expire_on_commit=False
         )
-        Session = scoped_session(SessionFactory)
-        self.__session = Session()
+        self.__session = scoped_session(SessionFactory)()
 
     def close(self):
         """Closes the storage engine."""
