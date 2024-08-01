@@ -3,8 +3,7 @@
 import os
 import uuid
 from datetime import datetime
-from sqlalchemy import String, DATETIME
-from sqlalchemy.orm import mapped_column
+from sqlalchemy import Column, String, DATETIME
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -13,9 +12,9 @@ Base = declarative_base()
 
 class BaseModel:
     """A base class for all hbnb models"""
-    id = mapped_column(String(60), nullable=False, primary_key=True, unique=True, sort_order=0)
-    created_at = mapped_column(DATETIME, nullable=False, sort_order=1, default=datetime.utcnow())
-    updated_at = mapped_column(DATETIME, nullable=False, sort_order=2, default=datetime.utcnow())
+    id = Column(String(60), nullable=False, primary_key=True, unique=True)
+    created_at = Column(DATETIME, nullable=False, default=datetime.utcnow())
+    updated_at = Column(DATETIME, nullable=False, default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
@@ -24,18 +23,25 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
         else:
+            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
+                                                     '%Y-%m-%dT%H:%M:%S.%f')
+            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
+                                                     '%Y-%m-%dT%H:%M:%S.%f')
+            del kwargs['__class__']
+            self.__dict__.update(kwargs)
+
             if not hasattr(kwargs, 'id'):
                 setattr(self, 'id', str(uuid.uuid4()))
             if not hasattr(kwargs, 'created_at'):
                 setattr(self, 'created_at', datetime.now())
-            else:
-                kwargs['created_at'] = datetime.strptime(kwargs['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
             if not hasattr(kwargs, 'updated_at'):
                 setattr(self, 'updated_at', datetime.now())
-            else:
-                kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
-            kwargs.pop('__class__', None)
-            self.__dict__.update(kwargs)
+            if not hasattr(kwargs, 'id'):
+                setattr(self, 'id', str(uuid.uuid4()))
+            if not hasattr(kwargs, 'created_at'):
+                setattr(self, 'created_at', datetime.now())
+            if not hasattr(kwargs, 'updated_at'):
+                setattr(self, 'updated_at', datetime.now())
 
     def __str__(self):
         """Returns a string representation of the instance"""

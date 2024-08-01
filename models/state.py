@@ -2,8 +2,8 @@
 """ State Module for HBNB project """
 import os
 from models.base_model import BaseModel, Base
-from sqlalchemy import String
-from sqlalchemy.orm import relationship, mapped_column
+from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
 from models.city import City
 
 
@@ -11,8 +11,8 @@ if os.getenv('HBNB_TYPE_STORAGE') == 'db':
     class State(BaseModel, Base):
         """ State class """
         __tablename__ = 'states'
-        name = mapped_column(
-            String(128), nullable=False, sort_order=3
+        name = Column(
+            String(128), nullable=False
         )
         cities = relationship(
             'City',

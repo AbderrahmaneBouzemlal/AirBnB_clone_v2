@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 import os
-from sqlalchemy import Float, ForeignKey, Integer, String, Table, Column
-from sqlalchemy.orm import relationship, mapped_column
+from sqlalchemy import Column, Float, ForeignKey, Integer, String, Table
+from sqlalchemy.orm import relationship
+
 from models.base_model import BaseModel, Base
 from models.review import Review
 from models.amenity import Amenity
@@ -34,36 +35,35 @@ if os.getenv('HBNB_TYPE_STORAGE') == 'db':
     class Place(BaseModel, Base):
         """ A place to stay """
         __tablename__ = 'places'
-        __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'latin1'}
-        city_id = mapped_column(
-            String(60), ForeignKey('cities.id'), nullable=False, sort_order=3
+        city_id = Column(
+            String(60), ForeignKey('cities.id'), nullable=False
         )
-        user_id = mapped_column(
-            String(60), ForeignKey('users.id'), nullable=False, sort_order=4
+        user_id = Column(
+            String(60), ForeignKey('users.id'), nullable=False
         )
-        name = mapped_column(
-            String(128), nullable=False, sort_order=5
+        name = Column(
+            String(128), nullable=False
         )
-        description = mapped_column(
-            String(1024), nullable=True, sort_order=6
+        description = Column(
+            String(1024), nullable=True
         )
-        number_rooms = mapped_column(
-            Integer, nullable=False, default=0, sort_order=7
+        number_rooms = Column(
+            Integer, nullable=False, default=0
         )
-        number_bathrooms = mapped_column(
-            Integer, nullable=False, default=0, sort_order=8
+        number_bathrooms = Column(
+            Integer, nullable=False, default=0
         )
-        max_guest = mapped_column(
-            Integer, nullable=False, default=0, sort_order=9
+        max_guest = Column(
+            Integer, nullable=False, default=0
         )
-        price_by_night = mapped_column(
-            Integer, nullable=False, default=0, sort_order=10
+        price_by_night = Column(
+            Integer, nullable=False, default=0
         )
-        latitude = mapped_column(
-            Float, nullable=True, sort_order=11
+        latitude = Column(
+            Float, nullable=True
         )
-        longitude = mapped_column(
-            Float, nullable=True, sort_order=12
+        longitude = Column(
+            Float, nullable=True
         )
         reviews = relationship(
             'Review',
@@ -76,7 +76,6 @@ if os.getenv('HBNB_TYPE_STORAGE') == 'db':
             viewonly=False,
             backref='place_amenities'
         )
-
 else:
     class Place(BaseModel):
         """ A place to stay """
