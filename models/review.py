@@ -10,6 +10,10 @@ if os.getenv('HBNB_TYPE_STORAGE') == 'db':
     class Review(BaseModel, Base):
         """ Review classto store review information """
         __tablename__ = 'reviews'
+        __table_args__ = {
+            'mysql_engine': 'InnoDB',
+            'mysql_charset': 'latin1'
+        }
         place_id = Column(
             String(60), ForeignKey('places.id'), nullable=False
         )

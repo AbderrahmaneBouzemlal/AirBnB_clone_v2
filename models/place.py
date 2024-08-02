@@ -25,7 +25,9 @@ place_amenity = Table(
         ForeignKey('amenities.id'),
         nullable=False,
         primary_key=True
-    )
+    ),
+    mysql_engine='InnoDB',
+    mysql_charset='latin1'
 )
 """Represents the many to many relationship table
 between Place and Amenity records.
@@ -35,6 +37,10 @@ if os.getenv('HBNB_TYPE_STORAGE') == 'db':
     class Place(BaseModel, Base):
         """ A place to stay """
         __tablename__ = 'places'
+        __table_args__ = {
+            'mysql_engine': 'InnoDB',
+            'mysql_charset': 'latin1'
+        }
         city_id = Column(
             String(60), ForeignKey('cities.id'), nullable=False
         )

@@ -9,6 +9,10 @@ if os.getenv('HBNB_TYPE_STORAGE') == 'db':
     class User(BaseModel, Base):
         """This class defines a user by various attributes"""
         __tablename__ = 'users'
+        __table_args__ = {
+            'mysql_engine': 'InnoDB',
+            'mysql_charset': 'latin1'
+        }
         email = Column(
             String(128), nullable=False
         )
