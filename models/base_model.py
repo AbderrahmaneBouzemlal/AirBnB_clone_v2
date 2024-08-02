@@ -3,18 +3,18 @@
 import os
 import uuid
 from datetime import datetime
-from sqlalchemy import Column, String, DATETIME
+from sqlalchemy import String, DATETIME
 from sqlalchemy.ext.declarative import declarative_base
-
+from sqlalchemy.orm import mapped_column
 
 Base = declarative_base()
 
 
 class BaseModel:
     """A base class for all hbnb models"""
-    id = Column(String(60), nullable=False, primary_key=True, unique=True)
-    created_at = Column(DATETIME, nullable=False, default=datetime.utcnow())
-    updated_at = Column(DATETIME, nullable=False, default=datetime.utcnow())
+    id = mapped_column(String(60), nullable=False, primary_key=True, unique=True, sort_order=0)
+    created_at = mapped_column(DATETIME, nullable=False, default=datetime.utcnow(), sort_order=1)
+    updated_at = mapped_column(DATETIME, nullable=False, default=datetime.utcnow(), sort_order=2)
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""

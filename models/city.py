@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """ City Module for HBNB project """
 import os
-from sqlalchemy import Column, String, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import String, ForeignKey
+from sqlalchemy.orm import relationship, mapped_column
 
 from models.base_model import BaseModel, Base
 
@@ -14,11 +14,11 @@ class City(BaseModel, Base):
         'mysql_engine': 'InnoDB',
         'mysql_charset': 'latin1'
     }
-    name = Column(
-        String(128), nullable=False
+    name = mapped_column(
+        String(128), nullable=False, sort_order=3
     ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
-    state_id = Column(
-        String(60), ForeignKey('states.id'), nullable=False
+    state_id = mapped_column(
+        String(60), ForeignKey('states.id'), nullable=False, sort_order=4
     ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
     places = relationship(
         'Place',

@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
 import os
-from sqlalchemy import Column, String
-from sqlalchemy.orm import relationship
-
+from sqlalchemy import String
+from sqlalchemy.orm import relationship, mapped_column
 from models.base_model import BaseModel, Base
 from models.city import City
 
@@ -15,7 +14,7 @@ class State(BaseModel, Base):
         'mysql_engine': 'InnoDB',
         'mysql_charset': 'latin1'
     }
-    name = Column(
+    name = mapped_column(
         String(128), nullable=False
     ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':

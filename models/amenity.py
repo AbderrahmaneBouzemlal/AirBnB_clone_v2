@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """ Amenity Module for HBNB project """
 import os
-from sqlalchemy import Column, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import String
+from sqlalchemy.orm import relationship, mapped_column
 
 from models.base_model import BaseModel, Base
 
@@ -14,8 +14,8 @@ if os.getenv('HBNB_TYPE_STORAGE') == 'db':
             'mysql_engine': 'InnoDB',
             'mysql_charset': 'latin1'
         }
-        name = Column(
-            String(128), nullable=False
+        name = mapped_column(
+            String(128), nullable=False, sort_order=3
         )
 else:
     class Amenity(BaseModel):
