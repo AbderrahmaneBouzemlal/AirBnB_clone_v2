@@ -66,4 +66,5 @@ class FileStorage:
             del (FileStorage.__objects[key])
 
     def close(self):
+        self.__session.close()
         self.reload()
