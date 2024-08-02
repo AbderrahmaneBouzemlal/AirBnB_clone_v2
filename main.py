@@ -1,87 +1,49 @@
 #!/usr/bin/python3
-import inspect
-import io
+"""Doc
+"""
+import MySQLdb
 import sys
-import cmd
-import shutil
-import os
-
-"""
- Backup console file
-"""
-if os.path.exists("tmp_console_main.py"):
-    shutil.copy("tmp_console_main.py", "console.py")
-shutil.copy("console.py", "tmp_console_main.py")
+import uuid
+from models import storage
+from models.state import State
 
 
-"""
- Updating console to remove "__main__"
-"""
-with open("tmp_console_main.py", "r") as file_i:
-    console_lines = file_i.readlines()
-    with open("console.py", "w") as file_o:
-        in_main = False
-        for line in console_lines:
-            if "__main__" in line:
-                in_main = True
-            elif in_main:
-                if "cmdloop" not in line:
-                    file_o.write(line.lstrip("    ")) 
-            else:
-                file_o.write(line)
+def add_states(number=1):
+    conn = MySQLdb.connect(host="localhost", port=3306, user=sys.argv[1], passwd=sys.argv[2], db=sys.argv[3], charset="utf8")
+    cur = conn.cursor()
 
-import console
+    for i in range(number):
+        cur.execute("INSERT INTO `states` (id, created_at, updated_at, name) VALUES ('{}','2016-03-25 19:42:40','2016-03-25 19:42:40','state{}');".format(str(uuid.uuid4()), i))
+
+    conn.commit()
+    cur.close()
+    conn.close()
 
 
-"""
- Create console
-"""
-console_obj = "HBNBCommand"
-for name, obj in inspect.getmembers(console):
-    if inspect.isclass(obj) and issubclass(obj, cmd.Cmd):
-        console_obj = obj
+def wrapper_all_type(m_class):
+    res = {}
+    try:
+        res = storage.all(m_class)
+    except:
+        res = {}
+    if res is None or len(res.keys()) == 0:
+        try:
+            res = storage.all(m_class.__name__)
+        except:
+            res = {}
+    return res
+        
 
-my_console = console_obj(stdout=io.StringIO(), stdin=io.StringIO())
-my_console.use_rawinput = False
+print(len(wrapper_all_type(State)))
 
+# Initial number of states
+add_states(3)
 
-"""
- Exec command
-"""
-def exec_command(my_console, the_command, last_lines = 1):
-    my_console.stdout = io.StringIO()
-    real_stdout = sys.stdout
-    sys.stdout = my_console.stdout
-    my_console.onecmd(the_command)
-    sys.stdout = real_stdout
-    lines = my_console.stdout.getvalue().split("\n")
-    return "\n".join(lines[(-1*(last_lines+1)):-1])
+storage.close()
+print(len(wrapper_all_type(State)))
 
+# Add new states
+add_states(2)
 
-"""
- Tests
-"""
-result = exec_command(my_console, "all City", 8)
-if result is None or result == "":
-    print("FAIL: No cities retrieved")
-if "my_id_c_0" not in result or "my_id_c" not in result or "San Francisco" not in result:
-    print("FAIL: Missing information c0")
-if "my_id_c_1" not in result or "my_id_c" not in result or "San Jose" not in result:
-    print("FAIL: Missing information c1")
-if "my_id_c_2" not in result or "my_id_c" not in result or "Los Angeles" not in result:
-    print("FAIL: Missing information c2")
-if "my_id_c_3" not in result or "my_id_c" not in result or "Fremont" not in result:
-    print("FAIL: Missing information c3")
-if "my_id_c_4" not in result or "my_id_c" not in result or "Palo Alto" not in result:
-    print("FAIL: Missing information c4")
-if "my_id_c_5" not in result or "my_id_c" not in result or "Oakland" not in result:
-    print("FAIL: Missing information c5")
-if "my_id_a_0" not in result or "my_id_a" not in result or "Page" not in result:
-    print("FAIL: Missing information a0")
-if "my_id_a_1" not in result or "my_id_a" not in result or "Phoenix" not in result:
-    print("FAIL: Missing information a1")
-    
-print("OK", end="")
-
-shutil.copy("tmp_console_main.py", "console.py")
-
+storage.close()
+print(len(wrapper_all_type(State)))
