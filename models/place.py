@@ -17,14 +17,14 @@ place_amenity = Table(
         String(60),
         ForeignKey('places.id'),
         nullable=False,
-        primary_key=True, sort_order=3
+        primary_key=True
     ),
     Column(
         'amenity_id',
         String(60),
         ForeignKey('amenities.id'),
         nullable=False,
-        primary_key=True, sort_order=4
+        primary_key=True
     ),
     mysql_engine='InnoDB',
     mysql_charset='latin1'
